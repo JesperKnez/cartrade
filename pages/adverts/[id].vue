@@ -75,16 +75,14 @@ onMounted(() => {
       </div>
     </section>
     <UDivider class="my-6"/>
-    <section class="description grid grid-cols-12">
-      <div class="grid-start-2 grid-end-11">
-        <h3 class="text-4xl font-bold">Beschrijving</h3>
-        <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate delectus doloremque
-          doloribus, expedita mollitia odio praesentium quia reprehenderit sapiente vel. Commodi consequuntur culpa
-          debitis dolor doloribus ducimus earum eius magni minus nisi placeat possimus repellendus sed tenetur ut,
-          veniam vero voluptatem? Alias aliquam consequuntur cum dignissimos, distinctio enim excepturi, facere facilis
-          fugit illum incidunt magni maxime nostrum numquam, odio omnis quam qui quos ratione rem repudiandae similique
-          sit tempora. Aspernatur cupiditate deleniti dolor in ipsam quidem suscipit vitae voluptas voluptatem.</p>
-      </div>
+    <section class="description">
+      <h3 class="text-4xl font-bold">Beschrijving</h3>
+      <p class="mt-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate delectus doloremque
+        doloribus, expedita mollitia odio praesentium quia reprehenderit sapiente vel. Commodi consequuntur culpa
+        debitis dolor doloribus ducimus earum eius magni minus nisi placeat possimus repellendus sed tenetur ut, veniam
+        vero voluptatem? Alias aliquam consequuntur cum dignissimos, distinctio enim excepturi, facere facilis fugit
+        illum incidunt magni maxime nostrum numquam, odio omnis quam qui quos ratione rem repudiandae similique sit
+        tempora. Aspernatur cupiditate deleniti dolor in ipsam quidem suscipit vitae voluptas voluptatem.</p>
     </section>
   </main>
 </template>
