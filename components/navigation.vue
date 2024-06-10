@@ -1,7 +1,13 @@
-<template lang="">
-    <div class="max-w-full mx-auto bg-green-950 px-6 py-4 text-center">
-        <h1 class="font-sans text-7xl">Navigation</h1>
+<template>
+  <div class="py-6 grid grid-cols-2 items-center">
+    <div class="logo col-span-1">
+      <h1>Cartrade</h1>
     </div>
+    <div class="profile col-span-1 flex justify-end items-center gap-4">
+     <UButton>Inloggen</UButton>
+      <UAvatar icon="i-heroicons-photo" size="sm" />
+    </div>
+  </div>
 </template>
 <script>
 export default {

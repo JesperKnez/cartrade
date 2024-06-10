@@ -2,3 +2,27 @@ GET https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=35PFNN
 
 ### 
 GET https://opendata.rdw.nl/resource/8ys7-d773.json?kenteken=35PFNN
+
+###
+GET https://opendata.rdw.nl/resource/vezc-m2t6.json?kenteken=35PFNN
+
+###
+GET http://localhost:3001/api/adverts/all
+
+###
+POST http://localhost:3001/api/adverts/get
+Content-Type: application/json
+
+{
+  "id": 2
+}
+
+###
+POST http://localhost:3001/api/accounts/add
+Content-Type: application/json
+
+{
+    "username": "apitest",
+    "email": "apitest@cartrade.nl",
+    "password": "test"
+}

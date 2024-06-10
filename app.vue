@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <UContainer>
     <Navigation />
+    <UDivider />
     <NuxtPage />
-  </div>
+  </UContainer>
 </template>
 <style>
 *{
