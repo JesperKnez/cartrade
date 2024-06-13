@@ -4,16 +4,22 @@
       <h1>Cartrade</h1>
     </div>
     <div class="profile col-span-1 flex justify-end items-center gap-4">
-     <UButton>Inloggen</UButton>
-      <UAvatar icon="i-heroicons-photo" size="sm" />
+      <theme-switcher></theme-switcher>
+      <UButton v-if="showLoginButton && !isLoggedIn" to="/login">Inloggen</UButton>
+      <UAvatar icon="i-heroicons-user" size="sm" v-if="isLoggedIn"/>
     </div>
   </div>
 </template>
-<script>
-export default {
-    
+<script setup>
+const route = useRoute();
+const showLoginButton = computed(() => route.path !== '/login');
+
+const isLoggedIn = ref(false);
+
+const user = useCookie('user');
+const username = user.value?.username;
+
+if (user.value !== undefined) {
+  isLoggedIn.value = user.value.loggedIn;
 }
 </script>
-<style lang="">
-    
-</style>

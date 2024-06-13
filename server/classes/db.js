@@ -4,7 +4,7 @@
 //database connection in constructor
 class DbConnect {
     constructor(mysql, host, user, password, database, dateStrings) {
-        if(dateStrings !== true){
+        if (dateStrings !== true) {
             dateStrings == false
         }
         this.connection = mysql.createConnection({
@@ -18,10 +18,10 @@ class DbConnect {
             if (err) {
                 console.error('Error connecting to the database:', err);
             } else {
-                console.log('Connected to the database');
+                // console.log('Connected to the database');
             }
         });
     }
 }
-    
+
 module.exports = DbConnect;

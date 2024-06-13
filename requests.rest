@@ -10,11 +10,34 @@ GET https://opendata.rdw.nl/resource/vezc-m2t6.json?kenteken=35PFNN
 GET http://localhost:3001/api/adverts/all
 
 ###
+GET http://localhost:3001/api/merken/all
+
+###
+POST http://localhost:3001/api/merken/get
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+###
 POST http://localhost:3001/api/adverts/get
 Content-Type: application/json
 
 {
-  "id": 2
+  "id": 1
+}
+
+###
+POST http://localhost:3001/api/adverts/filter
+Content-Type: application/json
+
+{
+  "filters": {
+    "merk": "Audi",
+    "model": "A6",
+    "bouwjaar": 2024
+  }
 }
 
 ###
@@ -22,7 +45,36 @@ POST http://localhost:3001/api/accounts/add
 Content-Type: application/json
 
 {
-    "username": "apitest",
-    "email": "apitest@cartrade.nl",
-    "password": "test"
+  "username": "bcrypttest",
+  "email": "bcrypt@cartrade.nl",
+  "password": "hashtest"
 }
+
+###
+POST http://localhost:3001/api/accounts/login
+Content-Type: application/json
+
+{
+  "username": "bcrypttest",
+  "password": "hashtest"
+}
+
+###
+GET http://localhost:3001/api/modellen/all
+
+###
+POST http://localhost:3001/api/modellen/get
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+###
+POST http://localhost:3001/api/modellen/merk
+Content-Type: application/json
+
+{
+  "merk_id": "*"
+}
+
