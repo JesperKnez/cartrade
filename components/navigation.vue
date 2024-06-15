@@ -6,6 +6,7 @@
     <div class="profile col-span-1 flex justify-end items-center gap-4">
       <theme-switcher></theme-switcher>
       <UButton v-if="showLoginButton && !isLoggedIn" to="/login">Inloggen</UButton>
+      <UButton v-if="showLoginButton && isLoggedIn" to="/dashboard">Dashboard</UButton>
       <UAvatar icon="i-heroicons-user" size="sm" v-if="isLoggedIn"/>
     </div>
   </div>

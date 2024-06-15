@@ -1,10 +1,13 @@
-<script setup lang="ts">
+<script setup lang="js">
 import {object, string} from 'yup';
+
+const props = defineProps(['id']);
 
 const toast = useToast();
 
 const router = useRouter();
 
+const id = props.id;
 const schema = object({
   prijs: string().required('Verplicht veld'),
   kenteken: string().required('Verplicht veld').min(6, 'Kenteken moet 6 karakters bevatten'),
@@ -19,6 +22,7 @@ const schema = object({
 });
 
 const advert = reactive({
+  id: id,
   kenteken: '',
   merk: '',
   model: '',
@@ -61,108 +65,49 @@ const brandstof = ['Benzine', 'Diesel'];
 
 const transmissie = [{value: 0, label: 'Handgeschakeld'}, {value: 1, label: 'Automaat'}];
 
-const isFetching = ref(false);
 const isDisabled = ref(true);
-watch(() => advert.kenteken, async (newKenteken) => {
-  if (newKenteken.length === 6) {
-    isFetching.value = true;
-    const advertKenteken = newKenteken.toUpperCase();
-    const Auto = {
-      autoBasis: await $fetch(`https://opendata.rdw.nl/resource/m9d7-ebf2.json?kenteken=${advertKenteken}`),
-      autoBrandstof: await $fetch(`https://opendata.rdw.nl/resource/8ys7-d773.json?kenteken=${advertKenteken}`)
-    };
 
-    // Update state
-    advert.merk = Auto.autoBasis[0].merk;
-    advert.model = Auto.autoBasis[0].handelsbenaming;
-    advert.bouwjaar = Auto.autoBasis[0].datum_eerste_toelating.substring(0, 4);
-    advert.brandstof = Auto.autoBrandstof[0].brandstof_omschrijving;
-    advert.carosserie = Auto.autoBasis[0].inrichting;
-    advert.kleur = Auto.autoBasis[0].eerste_kleur;
-    advert.stoelen = Auto.autoBasis[0].aantal_zitplaatsen;
-    advert.deuren = Auto.autoBasis[0].aantal_deuren;
-    advert.vermogen_pk = Math.round(Auto.autoBrandstof[0].nettomaximumvermogen * 1.36);
-    advert.vermogen_kw = Math.round(Auto.autoBrandstof[0].nettomaximumvermogen);
-    advert.aantal_cilinders = Auto.autoBasis[0].aantal_cilinders;
-    advert.cilinderinhoud = Auto.autoBasis[0].cilinderinhoud;
-    advert.verbruik_stad = Auto.autoBrandstof[0].brandstofverbruik_stad;
-    advert.verbruik_snelweg = Auto.autoBrandstof[0].brandstofverbruik_buiten;
-    advert.verbruik_gecombineerd = Auto.autoBrandstof[0].brandstofverbruik_gecombineerd;
-    advert.uitstoot_gecombineerd = Auto.autoBrandstof[0].co2_uitstoot_gecombineerd;
-    advert.energieklasse = Auto.autoBasis[0].zuinigheidsclassificatie;
-    advert.massa_ledig_voertuig = Auto.autoBasis[0].massa_ledig_voertuig;
-    advert.massa_rijklaar = Auto.autoBasis[0].massa_rijklaar;
-    advert.maximum_massa = Auto.autoBasis[0].technische_max_massa_voertuig;
-    advert.trekmassa_ongeremd = Auto.autoBasis[0].maximum_massa_trekken_ongeremd;
-    advert.trekmassa_geremd = Auto.autoBasis[0].maximum_trekken_massa_geremd;
-    advert.max_massa_samenstelling = Auto.autoBasis[0].maximum_massa_samenstelling;
-    isFetching.value = false;
+const renderForm = ref(false);
 
-    // Enable form
-    isDisabled.value = false;
-  } else {
-    isDisabled.value = true;
+onMounted(async () => {
+  const fetchedAdvert = await $fetch(`http://localhost:3001/api/adverts/get`, {
+    method: 'POST',
+    body: JSON.stringify({
+      id: id
+    })
+  });
 
-    // Reset state
-    advert.merk = '';
-    advert.model = '';
-    advert.uitvoering = '';
-    advert.bouwjaar = '';
-    advert.brandstof = '';
-    advert.kilometerstand = '';
-    advert.prijs = '';
-    advert.transmissie = '';
-    advert.carosserie = '';
-    advert.kleur = '';
-    advert.stoelen = '';
-    advert.deuren = '';
-    advert.versnellingen = '';
-    advert.vermogen_pk = '';
-    advert.vermogen_kw = '';
-    advert.koppel = '';
-    advert.aantal_cilinders = '';
-    advert.cilinderinhoud = '';
-    advert.aandrijving = '';
-    advert.verbruik_stad = '';
-    advert.verbruik_snelweg = '';
-    advert.verbruik_gecombineerd = '';
-    advert.uitstoot_gecombineerd = '';
-    advert.energieklasse = '';
-    advert.massa_ledig_voertuig = '';
-    advert.massa_rijklaar = '';
-    advert.maximum_massa = '';
-    advert.trekmassa_ongeremd = '';
-    advert.trekmassa_geremd = '';
-    advert.max_massa_samenstelling = '';
+  // Loop over the keys of the fetched advert data
+  for (const key in fetchedAdvert) {
+    // Check if the key exists in the advert object
+    if (advert.hasOwnProperty(key)) {
+      // Assign the fetched value to the advert object
+      advert[key] = fetchedAdvert[key];
+    }
   }
+  console.log(fetchedAdvert);
+  // Enable the form
+  isDisabled.value = false;
 });
 
 async function onSubmit() {
   console.log(advert);
 
   try {
-    const response = await $fetch('http://localhost:3001/api/adverts/add', {
+    const response = await $fetch('http://localhost:3001/api/adverts/edit', {
       method: 'POST',
       body: JSON.stringify(advert),
       credentials: 'include',
     });
     console.log(response);
     switch (response.message) {
-      case 201:
+      case 200:
         toast.add({
           title: 'Advertentie',
-          description: 'Advertentie aangemaakt',
+          description: 'Advertentie gewijzigd',
           color: 'primary',
-          timeout: 2000,
+          timeout: 4000,
           callback: () => router.push('/dashboard')
-        });
-        break;
-      case 409:
-        toast.add({
-          title: 'Advertentie',
-          description: 'Er is al een advertentie met dit kenteken.',
-          color: 'red',
-          timeout: 0,
         });
         break;
       default:
@@ -181,14 +126,14 @@ async function onSubmit() {
 </script>
 
 <template>
-  <UForm :schema="schema" :state="advert" class="flex flex-col gap-4 items-stretch" @submit="onSubmit">
+  <UForm :schema="schema" :state="advert" class="flex flex-col gap-4 items-stretch"
+         @submit="onSubmit">
     <UFormGroup label="Prijs" name="prijs">
       <UInput v-model="advert.prijs"/>
     </UFormGroup>
     <UFormGroup label="Kenteken" name="kenteken">
-      <UInput maxlength="6" v-model="advert.kenteken"/>
+      <UInput disabled maxlength="6" v-model="advert.kenteken"/>
     </UFormGroup>
-    <UProgress v-if="isFetching" animation="carousel"/>
     <UDivider label="Basisgegevens"/>
     <div class="flex gap-4 w-full items-center flex-wrap">
       <UFormGroup label="Merk">

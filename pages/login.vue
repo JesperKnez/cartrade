@@ -25,7 +25,7 @@ const onSubmit = async () => {
           description: 'U bent succesvol ingelogd. U wordt zodadelijk doorverwezen.',
           color: 'primary',
           timeout: 4000,
-          callback: () => router.push('/')
+          callback: () => router.push('/dashboard')
         });
         break;
       case 404:

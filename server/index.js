@@ -58,7 +58,7 @@ api.post('/api/accounts/login', (req, res) => {
             bcrypt.compare(req.body.password, result[0].password).then((match) => {
                 if (match) {
                     const username = req.body.username;
-                    const token = jwt.sign(username, process.env.API_SECRET);
+                    const token = jwt.sign({username, id: result[0].id}, process.env.API_SECRET);
                     res.cookie('token', token, {httpOnly: true, maxAge: 7200 * 1000, secure: false, sameSite: 'none'});
                     res.cookie('user', JSON.stringify({
                         username: username,
@@ -107,7 +107,111 @@ api.post('/api/adverts/get', (req, res) => {
             res.send(error);
         });
 });
+// Get adverts by user id
+api.get('/api/adverts/user', (req, res) => {
+    try {
+        const token = req.cookies.token;
+        console.dir(req.cookies);
+        if (!token) {
+            return res.send({message: '401 no token present'});
+        }
+        jwt.verify(token, process.env.API_SECRET, (err, decoded) => {
+            if (err) {
+                return res.send({message: '401 token invalid'});
+            }
+            console.log('User ID: ' + decoded.id);
+            let adverts = new AdvertsModel(Db);
+            const result = adverts.getAdvertsByUserId(decoded.id).then((result) => {
+                res.send(result);
+            })
+                .catch((error) => {
+                    res.send(error);
+                });
+        });
+    } catch (error) {
+        console.error(error);
+        res.send({message: '500'});
+    }
+});
+// Add advert
+api.post('/api/adverts/add', (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.send({message: '401 no token present'});
+        }
+        jwt.verify(token, process.env.API_SECRET, (err, decoded) => {
+            if (err) {
+                return res.send({message: '401 token invalid'});
+            }
+            let adverts = new AdvertsModel(Db);
+            const result = adverts.createAdvertisement(req.body, decoded.id).then((result) => {
+                res.send({message: 201})
+            })
+                .catch((error) => {
+                    if (error.code === 'ER_DUP_ENTRY') {
+                        res.send({message: 409});
+                    } else {
+                        console.log(error);
+                        res.send({message: 500});
+                    }
+                });
+        });
+    } catch (error) {
+        console.error(error);
+        res.send({message: '500'});
+    }
+});
+//Update advert
+api.post('/api/adverts/edit', (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.send({message: '401 no token present'});
+        }
+        jwt.verify(token, process.env.API_SECRET, (err, decoded) => {
+            if (err) {
+                return res.send({message: '401 token invalid'});
+            }
+            let adverts = new AdvertsModel(Db);
+            const result = adverts.editAdvert(req.body).then((result) => {
+                res.send({message: 200});
+            })
+                .catch((error) => {
+                    res.send(error);
+                });
+        });
+    } catch (error) {
+        console.error(error);
+        res.send({message: '500'});
+    }
 
+});
+//Delete advert
+api.delete('/api/adverts/delete', (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.send({message: '401 no token present'});
+        }
+        jwt.verify(token, process.env.API_SECRET, (err, decoded) => {
+            if (err) {
+                return res.send({message: '401 token invalid'});
+            }
+            let adverts = new AdvertsModel(Db);
+            const result = adverts.deleteAdvert(req.body.id).then((result) => {
+                res.send({message: 205});
+            })
+                .catch((error) => {
+                    res.send(error);
+                });
+        });
+    } catch (error) {
+        console.error(error);
+        res.send({message: '500'});
+    }
+
+});
 // Merken routes
 // Get all merken
 api.get('/api/merken/all', (req, res) => {

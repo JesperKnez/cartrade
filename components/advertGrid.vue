@@ -1,6 +1,7 @@
 <template>
   <div class="grid grid-cols-1 gap-6">
-    <Advert v-for="Advert in Adverts" :key="Advert.id" :id="Advert.id" :kenteken="Advert.kenteken" :merk="Advert.merk"
+    <Advert class="bg-white dark:bg-gray-900" v-for="Advert in Adverts" :key="Advert.id" :id="Advert.id"
+            :kenteken="Advert.kenteken" :merk="Advert.merk"
             :model="Advert.model" :uitvoering="Advert.uitvoering" :bouwjaar="Advert.bouwjaar"
             :brandstof="Advert.brandstof" :kilometerstand="Advert.kilometerstand" :prijs="Advert.prijs"
             :transmissie="Advert.transmissie"/>

@@ -32,7 +32,7 @@ const props = defineProps([
 </script>
 <template>
   <NuxtLink :to="`/adverts/${id}`">
-    <div class="bg-white dark:bg-gray-900 shadow rounded-lg px-6 py-4">
+    <div class="shadow rounded-lg px-6 py-4">
       <div class="flex justify-between items-start">
         <div>
           <h3 class="text-2xl font-bold flex items-center gap-2">{{ merk }} {{ model }} <span
