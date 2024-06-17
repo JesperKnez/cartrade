@@ -67,8 +67,6 @@ const transmissie = [{value: 0, label: 'Handgeschakeld'}, {value: 1, label: 'Aut
 
 const isDisabled = ref(true);
 
-const renderForm = ref(false);
-
 onMounted(async () => {
   const fetchedAdvert = await $fetch(`http://localhost:3001/api/adverts/get`, {
     method: 'POST',

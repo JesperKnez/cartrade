@@ -63,9 +63,6 @@ const props = defineProps([
             <li class="text-lg font-semibold font-sans">Kilometerstand: <span
                 class="text-base font-normal">{{ kilometerstand }} km</span></li>
           </ul>
-          <!-- <pre class="text-xl font-mono font-medium">
-              {{Auto}}
-          </pre> -->
         </div>
       </div>
     </div>
